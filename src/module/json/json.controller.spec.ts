@@ -18,7 +18,7 @@ describe('JsonController', () => {
     service = module.get<JsonService>(JsonService);
   });
 
-  describe('findAll', () => {
+  describe('(GET) /jsons/', () => {
     it('should be array todos', async () => {
       const result = [
         {
@@ -31,11 +31,11 @@ describe('JsonController', () => {
       jest
         .spyOn(service, 'findAll')
         .mockImplementation(() => Promise.resolve(result));
-      expect(await controller.findALlJson()).toBe(result);
+      expect(await controller.findAllJson()).toBe(result);
     });
   });
 
-  describe('findOne', () => {
+  describe('(GET) /jsons/:id', () => {
     it('should be a todos', async () => {
       const id: number = 1;
       const result = {

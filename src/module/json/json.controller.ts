@@ -11,7 +11,7 @@ export class JsonController {
   @ApiOperation({
     summary: 'find all json',
   })
-  async findALlJson() {
+  async findAllJson() {
     return await this.jsonService.findAll();
   }
 
@@ -20,6 +20,7 @@ export class JsonController {
     summary: 'find all json',
   })
   async findOneJson(@Param('id', ParseIntPipe) id: number) {
-    return await this.jsonService.findOne(id);
+    const result = await this.jsonService.findOne(id);
+    return result;
   }
 }
