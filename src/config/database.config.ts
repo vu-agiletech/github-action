@@ -1,5 +1,5 @@
 import { registerAs } from '@nestjs/config';
 
 export default registerAs('database', () => ({
-  port: process.env.PORT,
+  url: process.env.DB_URL,
 }));
