@@ -1,4 +1,4 @@
-#!/usr/bin/env/bash
+#!/usr/bin/env bash
 
 echo "Running pre-commit hook"
 ./scripts/test.sh
