@@ -1,12 +1,9 @@
-#!/usr/bin/env bash
-#
-set -e
-cd "${0%/*}/.."
+#!/bin/sh
 
-echo "Running test before commit"
+echo "Running script ====>"
 
 yarn test
 yarn format
 yarn lint
 
-echo "Failed" && exit  1
+echo "Finish!"

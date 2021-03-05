@@ -1,5 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
+import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import databaseConfig from './config/database.config';
@@ -12,6 +13,7 @@ import { JsonModule } from './module/json/json.module';
     ConfigModule.forRoot({
       load: [jsonConfig, databaseConfig],
     }),
+    TypeOrmModule.forRoot(),
     JsonModule,
     CatModule,
   ],

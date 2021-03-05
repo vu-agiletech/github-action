@@ -38,14 +38,14 @@ describe('CatService', () => {
 
   describe('getAll', () => {
     it('should return array', async () => {
-      const testCats = await catService.getAll();
+      const testCats = await catService.findAll();
       expect(testCats).toEqual(cats);
     });
   });
 
   describe('getOne', () => {
     it('should return cat object', async () => {
-      const testCat = await catService.getOne(1);
+      const testCat = await catService.findOne(1);
       expect(testCat).toEqual(cat);
     });
   });
