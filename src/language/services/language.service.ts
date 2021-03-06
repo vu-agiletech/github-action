@@ -4,7 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { ResponseOk, Error } from 'src/response/';
+import { ResponseOk, Error } from '../../response/';
 import { Repository } from 'typeorm';
 import { UpdateLanguageDTO } from '../dto/language-update.dto';
 import { LanguageEntity } from '../entities/language.entity';

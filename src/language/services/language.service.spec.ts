@@ -1,6 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ResponseOk } from 'src/response/ok.response';
+import { ResponseOk } from '../../response';
 import { Repository } from 'typeorm';
 import { UpdateLanguageDTO } from '../dto/language-update.dto';
 import { LanguageEntity } from '../entities/language.entity';
