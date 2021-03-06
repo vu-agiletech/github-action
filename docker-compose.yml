@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  database:
+    image: mariadb
+    environment:
+      - MYSQL_DATABASE=nestjs
+      - MYSQL_USER=root
+      - MYSQL_PASSWORD=root
+      - MYSQL_ROOT_PASSWORD=root
+    volumes:
+      - ./data/db:/usr/mysql
+    ports:
+      - 3309:3306
+    command: --character-set-server=utf8mb4

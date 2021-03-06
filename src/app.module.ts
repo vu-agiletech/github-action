@@ -1,21 +1,21 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
-import { TypeOrmModule } from '@nestjs/typeorm';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { LanguageModule } from './language/language.module';
+import { ProjectModule } from './project/project.module';
 import databaseConfig from './config/database.config';
 import jsonConfig from './config/json.config';
-import { CatModule } from './module/cat/cat.module';
-import { JsonModule } from './module/json/json.module';
+import DatabaseModule from './database/';
 
 @Module({
   imports: [
     ConfigModule.forRoot({
       load: [jsonConfig, databaseConfig],
     }),
-    TypeOrmModule.forRoot(),
-    JsonModule,
-    CatModule,
+    DatabaseModule,
+    ProjectModule,
+    LanguageModule,
   ],
   controllers: [AppController],
   providers: [AppService],
