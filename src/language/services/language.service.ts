@@ -16,24 +16,16 @@ export class LanguageService {
     private readonly languageRepo: Repository<LanguageEntity>,
   ) {}
 
-  async findLanguageById(id: number): Promise<ResponseOk> {
-    const record: LanguageEntity = await this.languageRepo.findOne({
+  async findLanguageById(id: number): Promise<LanguageEntity> {
+    const language: LanguageEntity = await this.languageRepo.findOne({
       where: {
         id,
       },
     });
-
-    if (!record) {
-      throw new NotFoundException({
-        status: false,
-        data: Error.DATA_NOT_FOUND_WITH_ID,
-      });
+    if (!language) {
+      throw new NotFoundException();
     }
-
-    return {
-      status: true,
-      data: record,
-    };
+    return language;
   }
 
   async updateLanguageById(

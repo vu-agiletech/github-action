@@ -9,6 +9,8 @@ import { UserModule } from './user/user.module';
 import databaseConfig from './config/database.config';
 import jsonConfig from './config/json.config';
 import DatabaseModule from './database/';
+import { APP_FILTER } from '@nestjs/core';
+import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 
 @Module({
   imports: [
@@ -16,12 +18,18 @@ import DatabaseModule from './database/';
       load: [jsonConfig, databaseConfig],
     }),
     DatabaseModule,
-    ProjectModule,
     LanguageModule,
     AuthModule,
     UserModule,
+    ProjectModule,
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
 })
 export class AppModule {}

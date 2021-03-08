@@ -2,6 +2,7 @@ import { Controller, Param, Get, Put, Delete, Body } from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseOk } from 'src/response';
 import { UpdateLanguageDTO } from '../dto/language-update.dto';
+import { LanguageEntity } from '../entities/language.entity';
 import { LanguageService } from '../services/language.service';
 
 @ApiTags('Languages')
@@ -14,7 +15,10 @@ export class LanguageController {
   })
   @Get(':id')
   async getOneLanguageById(@Param('id') id: number): Promise<ResponseOk> {
-    return await this.languageService.findLanguageById(id);
+    const result: LanguageEntity = await this.languageService.findLanguageById(
+      id,
+    );
+    return result;
   }
 
   @ApiOperation({

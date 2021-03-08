@@ -40,7 +40,6 @@ export class AuthService {
     if (isEqualPassword) {
       return {
         ...user,
-        password: undefined,
       };
     }
     throw new HttpException(
