@@ -11,7 +11,7 @@ export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
 
   @ApiOperation({
-    summary: 'Get one language',
+    summary: 'Get one language by id',
   })
   @Get(':id')
   async getOneLanguageById(@Param('id') id: number): Promise<ResponseOk> {
@@ -22,14 +22,15 @@ export class LanguageController {
   }
 
   @ApiOperation({
-    summary: 'Update one language',
+    summary: 'Update one language by id',
   })
   @Put(':id')
   async updateOneLanguageById(
     @Param('id') id: number,
     @Body() payload: UpdateLanguageDTO,
   ): Promise<ResponseOk> {
-    return await this.languageService.updateLanguageById(id, payload);
+    const result = await this.languageService.updateLanguageById(id, payload);
+    return result;
   }
 
   @ApiOperation({
@@ -37,6 +38,9 @@ export class LanguageController {
   })
   @Delete(':id')
   async deleteOneLanguageById(@Param('id') id: number): Promise<ResponseOk> {
-    return await this.languageService.deleteLanguageById(id);
+    const result = await this.languageService.deleteLanguageById(id);
+    return {
+      status: true,
+    };
   }
 }

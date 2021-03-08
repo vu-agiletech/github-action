@@ -31,53 +31,36 @@ export class LanguageService {
   async updateLanguageById(
     id: number,
     payload: UpdateLanguageDTO,
-  ): Promise<ResponseOk> {
-    const recordFindById = await this.languageRepo.findOne({
+  ): Promise<LanguageEntity> {
+    const languageFindById = await this.languageRepo.findOne({
       where: {
         id,
       },
     });
-    if (!recordFindById) {
-      throw new NotFoundException({
-        status: false,
-        data: Error.DATA_NOT_FOUND_WITH_ID,
-      });
+    if (!languageFindById) {
+      throw new NotFoundException();
     }
     try {
-      const recordAfterUpdate = await this.languageRepo.save({
-        ...recordFindById,
+      const languageAfterUpdate = await this.languageRepo.save({
+        ...languageFindById,
         ...payload,
       });
-      return {
-        status: true,
-        data: recordAfterUpdate,
-      };
+      return languageAfterUpdate;
     } catch (e) {
-      throw new InternalServerErrorException({
-        status: false,
-        data: Error.SERVER_INTERNAL,
-      });
+      throw new InternalServerErrorException();
     }
   }
 
-  async deleteLanguageById(id: number): Promise<ResponseOk> {
+  async deleteLanguageById(id: number): Promise<boolean> {
     const recordFindById = await this.languageRepo.findOne(id);
     if (!recordFindById) {
-      throw new NotFoundException({
-        status: false,
-        data: Error.DATA_NOT_FOUND_WITH_ID,
-      });
+      throw new NotFoundException();
     }
     try {
       await this.languageRepo.delete({ id });
     } catch (e) {
-      throw new InternalServerErrorException({
-        status: false,
-        data: Error.SERVER_INTERNAL,
-      });
+      throw new InternalServerErrorException();
     }
-    return {
-      status: true,
-    };
+    return true;
   }
 }
