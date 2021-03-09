@@ -9,9 +9,10 @@ import { UserModule } from './user/user.module';
 import databaseConfig from './config/database.config';
 import jsonConfig from './config/json.config';
 import DatabaseModule from './database/';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { ValidateRequestMiddleware } from './common/middleware/validate-request.middleware';
+import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 
 @Module({
   imports: [
@@ -30,6 +31,10 @@ import { ValidateRequestMiddleware } from './common/middleware/validate-request.
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: ResponseInterceptor,
     },
   ],
 })

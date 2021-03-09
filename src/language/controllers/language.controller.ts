@@ -1,4 +1,12 @@
-import { Controller, Param, Get, Put, Delete, Body } from '@nestjs/common';
+import {
+  Controller,
+  Param,
+  Get,
+  Put,
+  Delete,
+  Body,
+  ParseIntPipe,
+} from '@nestjs/common';
 import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseOk } from 'src/response';
 import { UpdateLanguageDTO } from '../dto/language-update.dto';
@@ -14,7 +22,9 @@ export class LanguageController {
     summary: 'Get one language by id',
   })
   @Get(':id')
-  async getOneLanguageById(@Param('id') id: number): Promise<ResponseOk> {
+  async getOneLanguageById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ResponseOk> {
     const result: LanguageEntity = await this.languageService.findLanguageById(
       id,
     );
@@ -26,10 +36,13 @@ export class LanguageController {
   })
   @Put(':id')
   async updateOneLanguageById(
-    @Param('id') id: number,
+    @Param('id', ParseIntPipe) id: number,
     @Body() payload: UpdateLanguageDTO,
   ): Promise<ResponseOk> {
-    const result = await this.languageService.updateLanguageById(id, payload);
+    const result: LanguageEntity = await this.languageService.updateLanguageById(
+      id,
+      payload,
+    );
     return result;
   }
 
@@ -37,8 +50,10 @@ export class LanguageController {
     summary: 'Delete one language',
   })
   @Delete(':id')
-  async deleteOneLanguageById(@Param('id') id: number): Promise<ResponseOk> {
-    const result = await this.languageService.deleteLanguageById(id);
+  async deleteOneLanguageById(
+    @Param('id', ParseIntPipe) id: number,
+  ): Promise<ResponseOk> {
+    await this.languageService.deleteLanguageById(id);
     return {
       status: true,
     };
