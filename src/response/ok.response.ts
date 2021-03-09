@@ -7,5 +7,4 @@ export type ResponseOk =
   | ProjectEntity
   | UserEntity
   | string
-  | any
-  | object;
+  | any;

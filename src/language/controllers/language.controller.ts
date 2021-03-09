@@ -6,17 +6,49 @@ import {
   Delete,
   Body,
   ParseIntPipe,
+  Post,
+  Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiTags } from '@nestjs/swagger';
+import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseOk } from 'src/response';
+import { LanguageCreateDTO } from '../dto/language-create.dto';
 import { UpdateLanguageDTO } from '../dto/language-update.dto';
 import { LanguageEntity } from '../entities/language.entity';
 import { LanguageService } from '../services/language.service';
 
+@ApiHeader({
+  name: 'xattack',
+  required: true,
+})
 @ApiTags('Languages')
 @Controller('languages')
 export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
+
+  @ApiOperation({
+    summary: 'Create one language',
+  })
+  @Get()
+  async getLanguages(
+    @Query('size', ParseIntPipe) size: number,
+    @Query('page', ParseIntPipe) page: number,
+  ): Promise<ResponseOk[]> {
+    const result: LanguageEntity[] = await this.languageService.findAllLanguages(
+      size,
+      page,
+    );
+    return result;
+  }
+  @ApiOperation({
+    summary: 'Create one language',
+  })
+  @Post()
+  async create(@Body() payload: LanguageCreateDTO): Promise<ResponseOk> {
+    const result: LanguageEntity = await this.languageService.createOneLanguage(
+      payload,
+    );
+    return result;
+  }
 
   @ApiOperation({
     summary: 'Get one language by id',
