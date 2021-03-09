@@ -1,4 +1,4 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
@@ -11,6 +11,7 @@ import jsonConfig from './config/json.config';
 import DatabaseModule from './database/';
 import { APP_FILTER } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
+import { ValidateRequestMiddleware } from './common/middleware/validate-request.middleware';
 
 @Module({
   imports: [
@@ -32,4 +33,10 @@ import { HttpExceptionFilter } from './common/exception/http-exception.filter';
     },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer) {
+    consumer
+      .apply(ValidateRequestMiddleware)
+      .forRoutes('languages', 'projects');
+  }
+}
