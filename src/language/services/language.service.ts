@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { pagination } from 'src/common/utils';
 import { Repository } from 'typeorm';
 import { LanguageCreateDTO } from '../dto/language-create.dto';
 import { UpdateLanguageDTO } from '../dto/language-update.dto';
@@ -18,14 +19,15 @@ export class LanguageService {
   ) {}
 
   async findAllLanguages(
-    size: number,
     page: number,
+    size: number,
   ): Promise<LanguageEntity[]> {
     try {
+      const [offset, limit] = pagination(page, size);
       const languages: LanguageEntity[] = await this.languageRepo.find({
         where: {},
-        take: size,
-        skip: (page - 1) * size,
+        skip: offset,
+        take: limit,
       });
 
       return languages;
@@ -74,19 +76,19 @@ export class LanguageService {
       });
       return languageAfterUpdate;
     } catch (e) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(e.message);
     }
   }
 
   async deleteLanguageById(id: number): Promise<boolean> {
-    const recordFindById = await this.languageRepo.findOne(id);
+    const recordFindById: LanguageEntity = await this.languageRepo.findOne(id);
     if (!recordFindById) {
       throw new NotFoundException();
     }
     try {
       await this.languageRepo.delete({ id });
     } catch (e) {
-      throw new InternalServerErrorException();
+      throw new InternalServerErrorException(e.messsage);
     }
     return true;
   }

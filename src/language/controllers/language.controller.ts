@@ -26,19 +26,20 @@ export class LanguageController {
   constructor(private readonly languageService: LanguageService) {}
 
   @ApiOperation({
-    summary: 'Create one language',
+    summary: 'Get languages',
   })
   @Get()
   async getLanguages(
-    @Query('size', ParseIntPipe) size: number,
     @Query('page', ParseIntPipe) page: number,
+    @Query('size', ParseIntPipe) size: number,
   ): Promise<ResponseOk[]> {
     const result: LanguageEntity[] = await this.languageService.findAllLanguages(
-      size,
       page,
+      size,
     );
     return result;
   }
+
   @ApiOperation({
     summary: 'Create one language',
   })
