@@ -9,20 +9,28 @@ import { UserModule } from './user/user.module';
 import databaseConfig from './config/database.config';
 import jsonConfig from './config/json.config';
 import DatabaseModule from './database/';
+import CacheModule from './cache';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { ValidateRequestMiddleware } from './common/middleware/validate-request.middleware';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
+import cacheConfig from './config/cache.config';
 
 @Module({
   imports: [
+    // config
     ConfigModule.forRoot({
-      load: [jsonConfig, databaseConfig],
+      load: [jsonConfig, databaseConfig, cacheConfig],
     }),
+
+    // module config
     DatabaseModule,
-    LanguageModule,
+    CacheModule,
+
+    // feature module
     AuthModule,
     UserModule,
+    LanguageModule,
     ProjectModule,
   ],
   controllers: [AppController],
