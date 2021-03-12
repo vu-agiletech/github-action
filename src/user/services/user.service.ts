@@ -1,6 +1,5 @@
 import {
-  HttpException,
-  HttpStatus,
+  BadRequestException,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -8,6 +7,8 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AuthService } from 'src/auth/services/auth.service';
+import { generateUuid } from 'src/common/utils';
+import { ResponseOk } from 'src/response';
 import { Repository } from 'typeorm';
 import { CreateUserDTO } from '../dto/create-user.dto';
 import { LoginUserDTO } from '../dto/login-user.dto';
@@ -22,11 +23,15 @@ export class UserService {
   ) {}
 
   async create(payload: CreateUserDTO): Promise<UserEntity> {
-    const hashPassword = await this.authService.hashPassword(payload.password);
+    const hashPassword: string = await this.authService.hashPassword(
+      payload.password,
+    );
+    const refreshToken: string = generateUuid();
     try {
       const user = this.userRepository.create({
         username: payload.username,
         password: hashPassword,
+        refreshToken,
       });
       await this.userRepository.save(user);
       const { password, ...result } = user;
@@ -62,7 +67,7 @@ export class UserService {
     throw new UnauthorizedException();
   }
 
-  async login(payload: LoginUserDTO): Promise<string> {
+  async login(payload: LoginUserDTO): Promise<ResponseOk> {
     const user: UserEntity = await this.validateUser(
       payload.username,
       payload.password,
@@ -71,6 +76,25 @@ export class UserService {
       throw new UnauthorizedException();
     }
     const jwtString = await this.authService.generateJwt(user);
-    return jwtString;
+    return {
+      accessToken: jwtString,
+      refreshToken: user.refreshToken,
+    };
+  }
+
+  async refreshToken(refresh: string): Promise<ResponseOk> {
+    const user: UserEntity = await this.userRepository.findOne({
+      where: {
+        refreshToken: refresh,
+      },
+    });
+    if (!user) {
+      throw new BadRequestException();
+    }
+    const jwtString = await this.authService.generateJwt(user);
+    return {
+      accessToken: jwtString,
+      refreshToken: user.refreshToken,
+    };
   }
 }

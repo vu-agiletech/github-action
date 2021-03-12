@@ -23,6 +23,9 @@ export class UserEntity {
   @UpdateDateColumn()
   updateAt: Date;
 
+  @Column()
+  refreshToken: string;
+
   constructor(username: string, password: string) {
     this.username = username;
     this.password = password;
