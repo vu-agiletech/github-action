@@ -15,17 +15,20 @@ import { HttpExceptionFilter } from './common/exception/http-exception.filter';
 import { ValidateRequestMiddleware } from './common/middleware/validate-request.middleware';
 import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import cacheConfig from './config/cache.config';
+import limitRequestConfig from './config/limit-request.config';
+import ThrottlerModule from './throttle';
 
 @Module({
   imports: [
     // config
     ConfigModule.forRoot({
-      load: [jsonConfig, databaseConfig, cacheConfig],
+      load: [jsonConfig, databaseConfig, cacheConfig, limitRequestConfig],
     }),
 
     // module config
     DatabaseModule,
     CacheModule,
+    ThrottlerModule,
 
     // feature module
     AuthModule,
