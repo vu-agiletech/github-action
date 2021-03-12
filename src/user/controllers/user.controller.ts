@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Post } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ResponseOk } from 'src/response';
 import { CreateUserDTO } from '../dto/create-user.dto';
@@ -29,9 +29,18 @@ export class UserController {
   })
   @Post('login')
   async login(@Body() payload: LoginUserDTO): Promise<ResponseOk> {
-    const jwt: string = await this.userService.login(payload);
-    return {
-      accessToken: jwt,
-    };
+    const jwt: ResponseOk = await this.userService.login(payload);
+    return jwt;
+  }
+
+  @ApiOperation({
+    summary: 'refresh token user',
+  })
+  @Post('refresh-token')
+  async refreshToken(
+    @Body('refreshToken') refreshToken: string,
+  ): Promise<ResponseOk> {
+    const jwt: ResponseOk = await this.userService.refreshToken(refreshToken);
+    return jwt;
   }
 }
