@@ -1,4 +1,8 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserService } from 'src/user/services/user.service';
 import * as bcrypt from 'bcrypt';
 import { RegisterDTO } from '../dto/register.dto';
@@ -26,7 +30,7 @@ export class AuthService {
       });
       return newUser;
     } catch (e) {
-      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
+      throw new BadRequestException(e);
     }
   }
 
@@ -42,9 +46,6 @@ export class AuthService {
         ...user,
       };
     }
-    throw new HttpException(
-      'Username or password is invalid',
-      HttpStatus.BAD_REQUEST,
-    );
+    throw new UnauthorizedException();
   }
 }
