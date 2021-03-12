@@ -1,6 +1,7 @@
 import { Controller, Get, Render, UseGuards } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { ThrottlerGuard, Throttle } from '@nestjs/throttler';
+import * as os from 'os';
 
 @ApiTags('app')
 @UseGuards(ThrottlerGuard)
@@ -12,7 +13,7 @@ export class AppController {
   root() {
     console.log('1');
     return {
-      message: 'Hello world!',
+      message: `${os.hostname()}`,
     };
   }
 }

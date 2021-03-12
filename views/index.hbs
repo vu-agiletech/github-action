@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html>
+  <head>
+    <meta charset="utf-8" />
+    <title>App</title>
+  </head>
 
-<head>
-  <meta charset="utf-8" />
-  <title>App</title>
-</head>
-
-<body>
-  {{ message }}
-</body>
-
+  <body>
+    <div id="demo"></div>
+    <a id="swagger" href="link">Link</a>
+    <script>
+      document.getElementById('demo').innerHTML =
+        'The full URL of this page is:<br>' + window.location.href;
+      document
+        .getElementById('swagger')
+        .setAttribute('href', `${window.location.url}/swagger`);
+    </script>
+  </body>
 </html>

@@ -53,6 +53,6 @@ export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     consumer
       .apply(ValidateRequestMiddleware)
-      .forRoutes('languages', 'projects');
+      .forRoutes('languages', 'projects', 'users', 'auth');
   }
 }
