@@ -17,12 +17,19 @@ import { ResponseInterceptor } from './common/interceptor/response.interceptor';
 import cacheConfig from './config/cache.config';
 import limitRequestConfig from './config/limit-request.config';
 import ThrottlerModule from './throttle';
+import jwtConfig from './config/jwt.config';
 
 @Module({
   imports: [
     // config
     ConfigModule.forRoot({
-      load: [jsonConfig, databaseConfig, cacheConfig, limitRequestConfig],
+      load: [
+        jsonConfig,
+        databaseConfig,
+        cacheConfig,
+        limitRequestConfig,
+        jwtConfig,
+      ],
     }),
 
     // module config

@@ -14,12 +14,7 @@ import { AuthService } from '../services/auth.service';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
   @Post('register')
-  async register(@Body() payload: RegisterDTO): Promise<ResponseOk> {
-    await this.authService.register(payload);
-    return {
-      status: true,
-    };
-  }
+  async register(@Body() payload: RegisterDTO): Promise<ResponseOk> {}
 
   @Post('login')
   async login() {}

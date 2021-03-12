@@ -9,13 +9,13 @@ import {
 @Entity('User')
 export class UserEntity {
   @PrimaryGeneratedColumn('increment')
-  public id: number;
+  id: number;
 
   @Column()
-  public username: string;
+  username: string;
 
   @Column()
-  public password: string;
+  password?: string;
 
   @CreateDateColumn()
   createAt: Date;
