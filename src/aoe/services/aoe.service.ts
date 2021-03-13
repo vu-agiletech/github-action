@@ -1,10 +1,4 @@
-import { HttpService, Injectable } from '@nestjs/common';
+import { Injectable } from '@nestjs/common';
 
 @Injectable()
-export class AoeService {
-  constructor(private readonly httpService: HttpService) {}
-
-  async getCivilizations() {}
-
-  async getCivilizationById(id: number) {}
-}
+export class AoeService {}

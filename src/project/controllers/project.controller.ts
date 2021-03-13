@@ -5,16 +5,15 @@ import {
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
+import { UserRole } from 'src/common/constant/role.constant';
 import { Roles } from 'src/common/decorator/role.decorator';
 import { JwtAuthGuard } from 'src/common/guard/jwt.guard';
 import { RoleGuard } from 'src/common/guard/role.guard';
 import { ResponseOk } from 'src/response';
-import { UserRole } from 'src/user/dto/create-user.dto';
 import { ProjectService } from '../services/project.service';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RoleGuard)
-@Roles(UserRole.USER)
 @ApiHeader({
   name: 'xattack',
 })
@@ -23,15 +22,13 @@ import { ProjectService } from '../services/project.service';
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
 
+  @Roles(UserRole.ADMIN)
   @ApiOperation({
     summary: 'get one language with id',
   })
   @Get(':id')
   async getProjectById(@Param('id') id: number): Promise<ResponseOk> {
-    const result = await this.projectService.findOneProjectById(id);
-    return {
-      status: true,
-      data: result,
-    };
+    const result: ResponseOk = await this.projectService.findOneProjectById(id);
+    return result;
   }
 }

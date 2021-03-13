@@ -20,7 +20,7 @@ export class RoleGuard implements CanActivate {
   ) {}
 
   async canActivate(context: ExecutionContext): Promise<boolean> {
-    const roles = this.reflector.get<string[]>('role', context.getHandler());
+    const roles = this.reflector.get<string[]>('roles', context.getHandler());
     if (!roles) {
       return true;
     }
@@ -33,6 +33,7 @@ export class RoleGuard implements CanActivate {
   }
 
   checkRole(roles: string[], role: string): boolean {
+    console.log(roles, role);
     return roles.includes(role) ? true : false;
   }
 }

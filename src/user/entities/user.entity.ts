@@ -1,3 +1,4 @@
+import { UserRole } from 'src/common/constant/role.constant';
 import {
   Column,
   CreateDateColumn,
@@ -5,7 +6,6 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { UserRole } from '../dto/create-user.dto';
 
 @Entity('User')
 export class UserEntity {

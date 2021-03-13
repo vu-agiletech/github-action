@@ -8,8 +8,13 @@ import {
   ParseIntPipe,
   Post,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+import { UserRole } from 'src/common/constant/role.constant';
+import { Roles } from 'src/common/decorator/role.decorator';
+import { JwtAuthGuard } from 'src/common/guard/jwt.guard';
+import { RoleGuard } from 'src/common/guard/role.guard';
 import { ResponseOk } from 'src/response';
 import { LanguageCreateDTO } from '../dto/language-create.dto';
 import { UpdateLanguageDTO } from '../dto/language-update.dto';
@@ -67,6 +72,8 @@ export class LanguageController {
   @ApiOperation({
     summary: 'Update one language by id',
   })
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(UserRole.ADMIN)
   @Put(':id')
   async updateOneLanguageById(
     @Param('id', ParseIntPipe) id: number,
@@ -82,6 +89,8 @@ export class LanguageController {
   @ApiOperation({
     summary: 'Delete one language',
   })
+  @UseGuards(JwtAuthGuard, RoleGuard)
+  @Roles(UserRole.ADMIN)
   @Delete(':id')
   async deleteOneLanguageById(
     @Param('id', ParseIntPipe) id: number,

@@ -14,7 +14,7 @@ export class AuthService {
   async comparePassword(
     textPlain: string,
     cyperText: string,
-  ): Promise<boolean | any> {
+  ): Promise<boolean> {
     return bcrypt.compareSync(textPlain, cyperText);
   }
 

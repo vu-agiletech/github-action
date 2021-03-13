@@ -11,7 +11,6 @@ import { Request } from 'express';
 
 @Injectable()
 export class ResponseInterceptor implements NestInterceptor {
-  constructor() {}
   intercept(
     context: ExecutionContext,
     next: CallHandler<any>,
