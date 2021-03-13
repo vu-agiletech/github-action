@@ -10,7 +10,12 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
-import { ApiHeader, ApiOperation, ApiTags } from '@nestjs/swagger';
+import {
+  ApiBearerAuth,
+  ApiHeader,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
 import { UserRole } from 'src/common/constant/role.constant';
 import { Roles } from 'src/common/decorator/role.decorator';
 import { JwtAuthGuard } from 'src/common/guard/jwt.guard';
@@ -69,6 +74,7 @@ export class LanguageController {
     return result;
   }
 
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Update one language by id',
   })
@@ -86,6 +92,7 @@ export class LanguageController {
     return result;
   }
 
+  @ApiBearerAuth()
   @ApiOperation({
     summary: 'Delete one language',
   })

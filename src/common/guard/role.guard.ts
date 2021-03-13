@@ -33,7 +33,6 @@ export class RoleGuard implements CanActivate {
   }
 
   checkRole(roles: string[], role: string): boolean {
-    console.log(roles, role);
     return roles.includes(role) ? true : false;
   }
 }
