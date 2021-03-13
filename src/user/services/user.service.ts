@@ -61,20 +61,23 @@ export class UserService {
   }
 
   async validateUser(username: string, password: string): Promise<UserEntity> {
-    const user: UserEntity = await this.userRepository.findOne({
-      where: {
-        username,
-      },
-    });
-    const matchPassword: boolean = await this.authService.comparePassword(
-      password,
-      user.password,
-    );
-    if (matchPassword) {
-      const { password, ...result } = user;
-      return result;
+    try {
+      const user: UserEntity = await this.userRepository.findOne({
+        where: {
+          username,
+        },
+      });
+      const matchPassword: boolean = await this.authService.comparePassword(
+        password,
+        user.password,
+      );
+      if (matchPassword) {
+        const { password, ...result } = user;
+        return result;
+      }
+    } catch (e) {
+      throw new UnauthorizedException();
     }
-    throw new UnauthorizedException();
   }
 
   async login(payload: LoginUserDTO): Promise<ResponseOk> {

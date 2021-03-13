@@ -1,7 +1,10 @@
+import { LanguageEntity } from 'src/language/entities/language.entity';
+import { UserEntity } from 'src/user/entities/user.entity';
 import {
   Column,
   CreateDateColumn,
   Entity,
+  ManyToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
@@ -11,11 +14,20 @@ export class ProjectEntity {
   @PrimaryGeneratedColumn('increment')
   public id: number;
 
-  @Column()
-  public name: string;
+  @ManyToOne(() => UserEntity)
+  user: UserEntity;
 
   @Column()
-  public language: string;
+  userId: number;
+
+  @ManyToOne(() => LanguageEntity)
+  language: LanguageEntity;
+
+  @Column()
+  languageId: number;
+
+  @Column()
+  public name: string;
 
   @CreateDateColumn()
   public createAt: Date;
@@ -23,9 +35,14 @@ export class ProjectEntity {
   @UpdateDateColumn()
   public updateAt: Date;
 
-  constructor(name: string, language: string, createAt: Date, updateAt: Date) {
+  constructor(
+    name: string,
+    languageId: number,
+    createAt: Date,
+    updateAt: Date,
+  ) {
     this.name = name;
-    this.language = language;
+    this.languageId = languageId;
     this.createAt = createAt;
     this.updateAt = updateAt;
   }

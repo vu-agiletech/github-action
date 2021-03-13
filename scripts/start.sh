@@ -5,4 +5,7 @@
 
 yarn lint
 yarn format
-yarn start:dev
+git status
+git add .
+git commit
+
