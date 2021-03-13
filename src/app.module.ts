@@ -38,8 +38,8 @@ import jwtConfig from './config/jwt.config';
     ThrottlerModule,
 
     // feature module
-    AuthModule,
     UserModule,
+    AuthModule,
     LanguageModule,
     ProjectModule,
   ],

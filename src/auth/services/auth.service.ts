@@ -19,6 +19,10 @@ export class AuthService {
   }
 
   async generateJwt(user: UserEntity): Promise<string> {
-    return this.jwtService.signAsync({ id: user.id, username: user.username });
+    return this.jwtService.signAsync({
+      id: user.id,
+      username: user.username,
+      role: user.role,
+    });
   }
 }

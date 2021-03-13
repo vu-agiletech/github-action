@@ -1,5 +1,7 @@
 import {
   BadRequestException,
+  forwardRef,
+  Inject,
   Injectable,
   InternalServerErrorException,
   NotFoundException,
@@ -19,6 +21,7 @@ export class UserService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+
     private readonly authService: AuthService,
   ) {}
 
@@ -48,6 +51,15 @@ export class UserService {
       return result;
     }
     throw new NotFoundException();
+  }
+
+  async findOneUserById(id: number): Promise<UserEntity> {
+    const user: UserEntity = await this.userRepository.findOne({
+      where: {
+        id,
+      },
+    });
+    return user;
   }
 
   async validateUser(username: string, password: string): Promise<UserEntity> {
