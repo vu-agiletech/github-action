@@ -1,4 +1,13 @@
-import { Body, Controller, Get, Param, Post, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Param,
+  Post,
+  Put,
+  UseGuards,
+} from '@nestjs/common';
 import {
   ApiBearerAuth,
   ApiHeader,
@@ -14,6 +23,7 @@ import { ResponseOk } from 'src/response';
 import { ProjectEntity } from '../entities/project.entity';
 import { ProjectService } from '../services/project.service';
 import { CreateProjectDTO } from '../dto/create-project.dto';
+import { UpdateProjectDTO } from '../dto/update-project.dto';
 
 @ApiBearerAuth()
 @UseGuards(JwtAuthGuard, RoleGuard)
@@ -21,6 +31,7 @@ import { CreateProjectDTO } from '../dto/create-project.dto';
   name: 'xattack',
 })
 @ApiTags('Projects')
+@Roles(UserRole.ADMIN, UserRole.USER)
 @Controller('projects')
 export class ProjectController {
   constructor(private readonly projectService: ProjectService) {}
@@ -37,10 +48,10 @@ export class ProjectController {
       language: data.language?.language,
     };
   }
+
   @ApiOperation({
     summary: 'create project',
   })
-  @Roles(UserRole.USER)
   @Post()
   async createProject(
     @CurrentUser() user: UserRequest,
@@ -56,7 +67,6 @@ export class ProjectController {
   @ApiOperation({
     summary: 'get projects',
   })
-  @Roles(UserRole.USER)
   @Get()
   async getProjects(@CurrentUser() user: UserRequest): Promise<ResponseOk> {
     const projects: ProjectEntity[] = await this.projectService.findAllProject(
@@ -69,7 +79,6 @@ export class ProjectController {
     );
   }
 
-  @Roles(UserRole.USER)
   @ApiOperation({
     summary: 'get one project with id',
   })
@@ -77,5 +86,29 @@ export class ProjectController {
   async getProjectById(@Param('id') id: number): Promise<ResponseOk> {
     const result: ResponseOk = await this.projectService.findOneProjectById(id);
     return await this.projectResponse(result);
+  }
+
+  @ApiOperation({
+    summary: 'update one project with id',
+  })
+  @Put(':id')
+  async updateProjectById(
+    @Param('id') id: number,
+    @Body() payload: UpdateProjectDTO,
+  ): Promise<ResponseOk> {
+    const result: ResponseOk = await this.projectService.updateOneById(
+      id,
+      payload,
+    );
+    return await this.projectResponse(result);
+  }
+
+  @ApiOperation({
+    summary: 'update one project with id',
+  })
+  @Delete(':id')
+  async deletProjectById(@Param('id') id: number): Promise<ResponseOk> {
+    const result: ResponseOk = await this.projectService.deleteOneById(id);
+    return result;
   }
 }

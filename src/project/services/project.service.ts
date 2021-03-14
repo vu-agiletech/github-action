@@ -7,6 +7,7 @@ import {
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { CreateProjectDTO } from '../dto/create-project.dto';
+import { UpdateProjectDTO } from '../dto/update-project.dto';
 import { ProjectEntity } from '../entities/project.entity';
 
 @Injectable()
@@ -57,5 +58,34 @@ export class ProjectService {
       throw new NotFoundException();
     }
     return project;
+  }
+
+  async updateOneById(
+    id: number,
+    payload: UpdateProjectDTO,
+  ): Promise<ProjectEntity> {
+    try {
+      await this.projectRepository.update(id, payload);
+      const project = await this.projectRepository.findOne({
+        where: {
+          id,
+        },
+        relations: ['user', 'language'],
+      });
+      return project;
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
+  }
+
+  async deleteOneById(id: number): Promise<{ status: boolean }> {
+    try {
+      await this.projectRepository.delete({ id });
+      return {
+        status: true,
+      };
+    } catch (e) {
+      throw new InternalServerErrorException(e);
+    }
   }
 }
