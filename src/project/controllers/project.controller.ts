@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
@@ -42,7 +43,6 @@ export class ProjectController {
     return {
       ...data,
       userId: undefined,
-      languageId: undefined,
       user: undefined,
       author: data.user?.username,
       language: data.language?.language,
@@ -61,17 +61,30 @@ export class ProjectController {
       user.id,
       payload,
     );
-    return project;
+    return await this.projectResponse(project);
   }
 
   @ApiOperation({
     summary: 'get projects',
+    description: 'get all user languageId = 0 and filter languageId != 0',
   })
   @Get()
-  async getProjects(@CurrentUser() user: UserRequest): Promise<ResponseOk> {
-    const projects: ProjectEntity[] = await this.projectService.findAllProject(
-      user.id,
-    );
+  async getProjects(
+    @CurrentUser() user: UserRequest,
+    @Query('page') page: number,
+    @Query('size') size: number,
+    @Query('languageId') languageId: string,
+  ): Promise<ResponseOk> {
+    let projects: ResponseOk = [];
+    if (languageId !== '0') {
+      projects = await this.projectService.filterProject(user.id, {
+        page,
+        size,
+        languageId: Number(languageId),
+      });
+    } else {
+      projects = await this.projectService.findAllProject(user.id, page, size);
+    }
     return Promise.all(
       projects.map((project: ProjectEntity) => {
         return this.projectResponse(project);

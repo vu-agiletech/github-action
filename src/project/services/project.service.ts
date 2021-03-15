@@ -5,6 +5,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { pagination } from 'src/common/utils';
 import { Repository } from 'typeorm';
 import { CreateProjectDTO } from '../dto/create-project.dto';
 import { UpdateProjectDTO } from '../dto/update-project.dto';
@@ -22,24 +23,59 @@ export class ProjectService {
     payload: CreateProjectDTO,
   ): Promise<ProjectEntity> {
     try {
-      const project = this.projectRepository.create({
+      const project: ProjectEntity = this.projectRepository.create({
         name: payload.name,
         languageId: payload.languageId,
         userId,
       });
-      return await this.projectRepository.save(project);
+      await this.projectRepository.save(project);
+      const result: ProjectEntity = await this.projectRepository.findOne({
+        where: {
+          id: project.id,
+        },
+        relations: ['user', 'language'],
+      });
+      return result;
     } catch (e) {
       throw new InternalServerErrorException(e);
     }
   }
 
-  async findAllProject(userId: number): Promise<ProjectEntity[]> {
+  async filterProject(
+    userId: number,
+    filter: { size: number; page: number; languageId: number },
+  ): Promise<ProjectEntity[]> {
+    const [offset, limit] = pagination(filter.page, filter.size);
+    try {
+      const project: ProjectEntity[] = await this.projectRepository.find({
+        where: {
+          userId,
+          languageId: filter.languageId,
+        },
+        relations: ['user', 'language'],
+        take: limit,
+        skip: offset,
+      });
+      return project;
+    } catch (e) {
+      throw new BadRequestException(e);
+    }
+  }
+
+  async findAllProject(
+    userId: number,
+    page: number,
+    size: number,
+  ): Promise<ProjectEntity[]> {
+    const [offset, limit] = pagination(page, size);
     try {
       const projects: ProjectEntity[] = await this.projectRepository.find({
         where: {
           userId,
         },
         relations: ['user', 'language'],
+        take: limit,
+        skip: offset,
       });
       return projects;
     } catch (e) {
