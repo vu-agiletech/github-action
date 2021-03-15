@@ -18,6 +18,7 @@ import cacheConfig from './config/cache.config';
 import limitRequestConfig from './config/limit-request.config';
 import ThrottlerModule from './throttle';
 import jwtConfig from './config/jwt.config';
+import { FileModule } from './files/file.module';
 
 @Module({
   imports: [
@@ -42,6 +43,7 @@ import jwtConfig from './config/jwt.config';
     AuthModule,
     LanguageModule,
     ProjectModule,
+    FileModule,
   ],
   controllers: [AppController],
   providers: [
