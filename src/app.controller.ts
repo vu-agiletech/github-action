@@ -8,10 +8,9 @@ import * as os from 'os';
 @Throttle(60, 30)
 @Controller()
 export class AppController {
-  @Get()
+  @Get('/*')
   @Render('index')
   root() {
-    console.log('1');
     return {
       message: `${os.hostname()}`,
     };
